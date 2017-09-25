@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.example.displayjokeslibrary.DisplayJokeActivity;
 import com.example.sara.myapplication.backend.myApi.MyApi;
@@ -41,6 +42,7 @@ public class JokeAsyncTask extends AsyncTask<Void, Void, String> {
         if (myApiService == null) {
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
+                    //.setRootUrl("http://10.0.2.2:8080/_ah/api/") // 10.0.2.2 is localhost's IP address in Android emulator
                     .setRootUrl("https://default-demo-app-85a97.appspot.com/_ah/api/")
                     .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                         @Override
@@ -55,7 +57,7 @@ public class JokeAsyncTask extends AsyncTask<Void, Void, String> {
         try {
             return myApiService.getJokes().execute().getJokeText();
         } catch (IOException e) {
-            return e.getMessage();
+            return null;
         }
     }
 
@@ -63,7 +65,11 @@ public class JokeAsyncTask extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String result) {
 
         dialog.dismiss();
-        if(!result.isEmpty()) {
+        if (result == null) {
+            Toast.makeText(context, "An error Occur", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (!result.isEmpty()) {
             Intent intent = new Intent(context, DisplayJokeActivity.class);
             intent.putExtra(DisplayJokeActivity.EXTRA_JOKE, result);
             context.startActivity(intent);

@@ -47,7 +47,10 @@ public class MainActivity extends AppCompatActivity {
 
         MobileAds.initialize(this, APP_ID);
         mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+
         mAdView.loadAd(adRequest);
         mAdView.setAdListener(new AdListener() {
             @Override
