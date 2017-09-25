@@ -1,0 +1,52 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
+    defaultConfig {
+        applicationId "com.example.sara.jokesproject"
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    productFlavors
+            {
+                free
+                        {
+                            applicationId "com.example.sara.jokesproject.free"
+                        }
+                paid
+                        {
+                            applicationId "com.example.sara.jokesproject.paid"
+                        }
+            }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    compile project(':displayjokeslibrary')
+    compile project(path: ':backend', configuration: 'android-endpoints')
+
+    compile group: 'com.google.api-client', name: 'google-api-client', version: '1.22.0'
+    compile group: 'com.google.api-client', name: 'google-api-client-android', version: '1.22.0'
+
+    compile 'com.android.support:appcompat-v7:26.+'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.google.code.findbugs:jsr305:2.0.1'
+    testCompile 'junit:junit:4.12'
+    freeCompile 'com.google.android.gms:play-services-ads:11.0.2'
+}
